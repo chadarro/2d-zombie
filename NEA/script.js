@@ -10,11 +10,10 @@ let lvl2
 let bullet
 let stick
 let j
-let movementSpeed = 1.2
 let moving = false
 let cursor
 let framecount = 0
-let bulletDamage = 5
+ 
 let ammo = 50
 let ammoBox
 let addedAmmo = 20
@@ -30,7 +29,8 @@ let gamePlaying = false
 let score = 0
 let startButton
 function setup(){
-    createCanvas(1000, 1000)
+    createCanvas(1000, 1000,)
+    // p5play.renderStats = true;
     allSprites.pixelPerfect = true
 	wall = new Group()
     wall.visible = false
@@ -38,12 +38,12 @@ function setup(){
 	wall.w = tileSize
 	wall.h = tileSize
 	wall.tile = 'W'
-    wall.collider = 's'
+    wall.collider = 'n'
     wall.isWall = true
 
     bullet = new Group()
     bullet.collider = 'd'
-    bullet.speed = 13
+    bullet.speed = 17
     bullet.stroke = 'gold'
     bullet.layer = 1
     bullet.radius = 0.8
@@ -293,12 +293,12 @@ function preload(){
 function tickDmg(){
 
     if(player.ispoisoned &&  poisonTimer >0){
-        movementSpeed = 0.75
+        movementSpeed = 1
         player.health -= 0.4
     }
     if(poisonTimer <= 0){
         player.ispoisoned = false;
-        movementSpeed = 1.2
+        movementSpeed = 2
     }
 }
 function timePoison(){
@@ -348,24 +348,27 @@ e.collider = 'n'
 
         if(easyButton.mouse.pressed()){
             gamePlaying = true
-            ammo = 50
-            addedAmmo = 20
+            ammo = 100
+            addedAmmo = 10
             grenadeAmount = 3
             grenadeDamage = 50
+            bulletDamage = 10
         }
         else if(medButton.mouse.pressed()){
             gamePlaying = true
-            ammo = 50
-            addedAmmo = 10
+            ammo = 100
+            addedAmmo = 8
             grenadeAmount = 2
             grenadeDamage = 40
+            bulletDamage = 10
         }
         else if(hardButton.mouse.pressed()){
             gamePlaying = true
-            ammo = 50
+            ammo = 100
             addedAmmo = 5
             grenadeAmount = 1
-            grenadeDamage = 3
+            grenadeDamage = 30
+            bulletDamage = 8
         }
         if (backButton.mouse.pressed()){
             playingState = 0
@@ -458,7 +461,7 @@ function enemy1Movement(){
                     if(dist(player.x,player.y,e.x,e.y)<500){
                         e.direction = e.angleTo(player)
                         e.rotateMinTo(player, 5, 90)
-                        e.speed = 1.3
+                        e.speed = 1.9
                         e.changeAni('run')
                     }
                   }
@@ -501,7 +504,7 @@ function dogMovement(){
     if(dist(player.x,player.y,d.x,d.y)<500){
     d.direction = d.angleTo(player)
     d.rotateMinTo(player, 5, 90)
-    d.speed = 3}
+    d.speed = 4}
   }
   if(dist(player.x,player.y,d.x,d.y)>1000){
     d.direction = d.angleTo(player)
@@ -538,7 +541,7 @@ function poisonMovement(){
           if(dist(player.x,player.y,p.x,p.y)<500){
             p.direction = p.angleTo(player)
             p.rotateMinTo(player, 5, 90)
-            p.speed = 1.5 }
+            p.speed = 2.2 }
         }
         if(dist(player.x,player.y,p.x,p.y)>1000){
             p.direction = p.angleTo(player)
@@ -575,7 +578,7 @@ function BossMovement(){
     if(dist(player.x,player.y,v.x,v.y)<400){
         v.direction = v.angleTo(player)
         v.rotateMinTo(player, 3, 0)
-        v.speed = 1.5}
+        v.speed = 2}
   }
   if(dist(player.x,player.y,v.x,v.y)>1000){
     v.direction = v.angleTo(player)
@@ -769,7 +772,7 @@ if (player.opacity <= 0){
     for(d of dog){
         if (d.health <= 0 && d.opacity == 1){
             score += 100
-            let G = new grenadeBox.Sprite()
+            let G = new ammoBox.Sprite()
         G.x = d.x
         G.y = d.y
         }
@@ -1181,7 +1184,7 @@ lvl2 = [".......................................................................
 "W.................................................................................................................W.........................................................................",
 ".WWWWWWWWWWWWWWWWWWWWWWWW....WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW.................WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW..........................................................................",
 "..........Wz.....W...z..W.....W...W.....................W............................................WW...........W.........................................................................",
-"..........W...z..W......W.....W...WWWWWWWWWWWWW.........W.............................................WW.......W...W.........................................................................",
+"..........W...z..W......W.....W...WWWWWWWWWWWWW.........W............................................WW.......W...W.........................................................................",
 "..........W...z.....z...W.....W................W.........WW..........................................WW.......W...W.........................................................................",
 "..........W.z...z.......W.....W.....e.....e....W...........WWW.................................................W..W.........................................................................",
 "..........W...z....z....W...................e..W............WW....................................................W.........................................................................",
